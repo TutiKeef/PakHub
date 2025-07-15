@@ -29,20 +29,6 @@ Bootstrap 5 responsive framework
 
 Planned HTMX integration for dynamic interactions
 
-Architecture
-src/
-├── main/
-│   ├── java/com/connecthub/
-│   │   ├── config/        # Security and app configuration
-│   │   ├── controllers/   # API endpoints
-│   │   ├── models/        # Data entities
-│   │   ├── repositories/  # Database access
-│   │   ├── services/      # Business logic
-│   │   └── utils/         # Helper utilities
-│   └── resources/
-│       ├── static/        # Static assets
-│       └── templates/     # Thymeleaf views
-
 Project Roadmap
 Phase 1: Core Platform (Current)
 Complete user authentication system
