@@ -53,7 +53,11 @@ public class PerfilController {
     @PostMapping("/cadastro")
     public String cadastro(@RequestParam String username,
                            @RequestParam String password,
+                           @RequestParam String email,
+                           @RequestParam(required = false) String bio, // Tornado opcional
+                           @RequestParam(required = false) Long cellphone, // Tornado opcional
                            Model model) {
+
         if (perfilRepository.findByUsername(username) != null) {
             model.addAttribute("error", "Usuário já existe");
             return "cadastro";
@@ -62,7 +66,11 @@ public class PerfilController {
         PerfilModel novoPerfil = new PerfilModel();
         novoPerfil.setUsername(username);
         novoPerfil.setPassword(password);
+        novoPerfil.setEmail(email);
+        novoPerfil.setBio(bio != null ? bio : ""); // Tratamento para null
+        novoPerfil.setCellphone(cellphone != null ? cellphone : 0L); // Valor padrão
         perfilRepository.save(novoPerfil);
+
         return "redirect:/login";
     }
 
@@ -85,4 +93,16 @@ public class PerfilController {
         session.invalidate();
         return "redirect:/login";
     }
+    //Esqueceu a senha
+    @GetMapping("/esqueceu-senha")
+    public String esqueceuSenhaForm() {
+        return "esqueceu-senha"; // Deve corresponder ao nome do arquivo HTML
+    }
+    @PostMapping("/recuperar-senha")
+    public String recuperarSenha(@RequestParam String email, Model model) {
+        // Lógica para enviar email de recuperação
+        model.addAttribute("message", "Link de recuperação enviado para " + email);
+        return "mensagem";
+    }
+
 }

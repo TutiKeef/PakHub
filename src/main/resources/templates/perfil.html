@@ -51,7 +51,7 @@
 <div class="perfil-container">
     <h2>Bem-vindo(a), <span th:text="${perfil.username}">usuário</span>!</h2>
     <div class="info">
-        <p>Aqui você pode adicionar mais informações do perfil.</p>
+        <p> <span th:text="${perfil.bio}"></span> </p>
     </div>
     <div class="logout">
         <a th:href="@{/login}">Sair</a>
