@@ -11,6 +11,11 @@ public class PerfilModel {
 
     private String  username;
     private String password;
+    private Long cellphone;
+    private String email;
+    private String bio;
+
+
 
 
 
