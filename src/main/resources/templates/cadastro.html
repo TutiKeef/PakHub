@@ -70,6 +70,7 @@
 <div class="container">
     <h2>Criar Conta</h2>
     <form th:action="@{/cadastro}" method="post">
+
         <input type="text" name="username" placeholder="Usuário" required>
         <input type="password" name="password" placeholder="Senha" required>
         <button type="submit">Cadastrar</button>
@@ -79,5 +80,62 @@
         <p>Já tem conta? <a th:href="@{/login}">Fazer login</a></p>
     </div>
 </div>
+<script>
+
+    //Metodo para validar a senha
+    function validatePassword() {
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordHint = document.getElementById('password-hint');
+        const passwordMatch = document.getElementById('password-match');
+
+        // Validação do tamanho mínimo
+        if (password.value.length >= 6) {
+            passwordHint.textContent = "✔ Senha válida";
+            passwordHint.className = "password-hint valid";
+        } else if (password.value.length > 0) {
+            passwordHint.textContent = "✘ Mínimo 6 caracteres";
+            passwordHint.className = "password-hint invalid";
+        } else {
+            passwordHint.textContent = "Mínimo 6 caracteres";
+            passwordHint.className = "password-hint";
+        }
+
+        // Validação de confirmação
+        if (confirmPassword.value && password.value !== confirmPassword.value) {
+            passwordMatch.textContent = "✘ As senhas não coincidem";
+            passwordMatch.className = "password-match invalid";
+            confirmPassword.setCustomValidity("As senhas não coincidem");
+        } else if (confirmPassword.value) {
+            passwordMatch.textContent = "✔ Senhas coincidem";
+            passwordMatch.className = "password-match valid";
+            confirmPassword.setCustomValidity("");
+        } else {
+            passwordMatch.textContent = "";
+            passwordMatch.className = "password-match";
+        }
+    }
+
+    function validatePasswords() {
+
+        validatePassword(); // Chama função anterior
+
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        //Validação final
+        if (password.value.length < 6) {
+            alert("A senha deve ter no mínimo 6 caracteres");
+            return false; //Impede o envio
+        }
+
+        if (password.value !== confirmPassword.value) {
+            alert("As senhas não coincidem");
+            return false; //Impede o envio
+        }
+
+        return true; // Permite o envio
+    }
+</script>
 </body>
 </html>
