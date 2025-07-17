@@ -14,13 +14,14 @@ import java.time.LocalDateTime;
                 @UniqueConstraint(name = "uk_email", columnNames = {"email"})
         })
 public class PerfilModel {
+    //Declaração das variáveis de perfil
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Nome de usuário é obrigatório")
     @Size(min=3,max=20,message="Username deve ter entre 3 a 20 caracteres")
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String username;
 
     @NotBlank(message = "Senha é obrigatória")
@@ -38,13 +39,25 @@ public class PerfilModel {
     private String bio;
 
     @Digits(integer = 11, fraction = 0, message = "Celular deve conter apenas números")
-    @Column(length = 11)
+    @Column(length = 11, unique = true)
     private Long cellphone;
 
+    @Lob
+    @Column(name = "foto_Perfil")
+    private byte[] fotoPerfil;
 
 
 
     //Getters e Setters
+
+
+    public byte[] getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(byte[] fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
 
     public Long getCellphone() {
         return cellphone;

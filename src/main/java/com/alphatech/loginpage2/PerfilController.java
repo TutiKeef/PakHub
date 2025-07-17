@@ -6,6 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 public class PerfilController {
@@ -56,12 +59,25 @@ public class PerfilController {
                            @RequestParam String email,
                            @RequestParam(required = false) String bio, // Tornado opcional
                            @RequestParam(required = false) Long cellphone, // Tornado opcional
+                           @RequestParam(required = false, name = "fotoPerfil") MultipartFile fotoPerfil,
                            Model model) {
 
+        //Confere se o username já está em uso
         if (perfilRepository.findByUsername(username) != null) {
             model.addAttribute("error", "Usuário já existe");
             return "cadastro";
         }
+        //Confere se o email já está em uso
+        if (perfilRepository.findByEmail(email).isPresent()) {
+            model.addAttribute("error", "E-mail já está em uso");
+            return "cadastro";
+        }
+        //Confere se o cellphone já está em uso
+        if (cellphone != null && perfilRepository.findByCellphone(cellphone).isPresent()) {
+            model.addAttribute("error", "Celular já está em uso");
+            return "cadastro";
+        }
+
 
         PerfilModel novoPerfil = new PerfilModel();
         novoPerfil.setUsername(username);
@@ -69,6 +85,16 @@ public class PerfilController {
         novoPerfil.setEmail(email);
         novoPerfil.setBio(bio != null ? bio : ""); // Tratamento para null
         novoPerfil.setCellphone(cellphone != null ? cellphone : 0L); // Valor padrão
+
+        if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+            try {
+                byte[] imagemBytes = fotoPerfil.getBytes();
+                novoPerfil.setFotoPerfil(imagemBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         perfilRepository.save(novoPerfil);
 
         return "redirect:/login";

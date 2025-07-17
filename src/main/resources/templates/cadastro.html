@@ -70,6 +70,15 @@
 <div class="container">
     <h2>Criar Conta</h2>
     <form th:action="@{/cadastro}" method="post">
+        <!-- Foto de perfil -->
+        <div class="foto-perfil-container">
+            <!-- Pré-visualização -->
+            <img id="preview" class="preview-imagem" src="https://via.placeholder.com/120" />
+
+            <!-- Label estilizado e input escondido -->
+            <label for="fotoPerfil" class="botao-upload">Selecionar Foto</label>
+            <input type="file" id="fotoPerfil" name="fotoPerfil" class="input-file" accept="image/*" onchange="previewImagem(event)">
+        </div>
 
         <input type="text" name="username" placeholder="Usuário" required>
         <input type="password" name="password" placeholder="Senha" required>
@@ -81,6 +90,11 @@
     </div>
 </div>
 <script>
+    //Metodo para exibir foto de perfil no cadastro
+    function previewImagem(event) {
+        const imagem = document.getElementById('preview');
+        imagem.src = URL.createObjectURL(event.target.files[0]);
+    }
 
     //Metodo para validar a senha
     function validatePassword() {
