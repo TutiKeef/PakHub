@@ -1,13 +1,22 @@
 package com.alphatech.loginpage2;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import com.alphatech.loginpage2.service.EmailService;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringBootTest
-class LoginPage2ApplicationTests {
+@Component
+public class EmailTest implements CommandLineRunner {
 
-    @Test
-    void contextLoads() {
+    @Autowired
+    private EmailService emailService;
+
+    @Override
+    public void run(String... args) {
+        emailService.enviarEmail(
+                "arthurbragaalvesmartins@gmail.com", // ou outro email de destino
+                "Teste de envio",
+                "Este é um email de teste enviado via Spring Boot"
+        );
     }
-
 }

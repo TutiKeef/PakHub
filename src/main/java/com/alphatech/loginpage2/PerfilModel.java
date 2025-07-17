@@ -29,6 +29,10 @@ public class PerfilModel {
     @Column(nullable = false)
     private String password;
 
+    //Variáveis para recuperação de senha
+    private String resetToken;
+    private LocalDateTime tokenExpiracao;
+
     @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail inválido")
     @Column(nullable = false, unique = true)
@@ -107,5 +111,19 @@ public class PerfilModel {
         this.password = password;
     }
 
+    public LocalDateTime getTokenExpiracao() {
+        return tokenExpiracao;
+    }
 
+    public void setTokenExpiracao(LocalDateTime tokenExpiracao) {
+        this.tokenExpiracao = tokenExpiracao;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
 }
