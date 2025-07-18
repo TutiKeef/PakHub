@@ -33,7 +33,7 @@ public class RecuperacaoSenhaService {
 
         // Enviando e-mail real
         String link = "http://localhost:8080/resetar-senha?token=" + token;
-        emailService.enviarEmail(
+        emailService.enviarEmailComHtml(
                 email,
                 "Recuperação de Senha",
                 "Clique no link para resetar sua senha: " + link
