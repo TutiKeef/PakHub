@@ -30,7 +30,7 @@ public class PerfilModel {
     private String password;
 
     //Variáveis para recuperação de senha
-    private String resetToken;
+    private String tokenRecuperacao;
     private LocalDateTime tokenExpiracao;
 
     @NotBlank(message = "E-mail é obrigatório")
@@ -54,6 +54,14 @@ public class PerfilModel {
 
     //Getters e Setters
 
+
+    public String getTokenRecuperacao() {
+        return tokenRecuperacao;
+    }
+
+    public void setTokenRecuperacao(String tokenRecuperacao) {
+        this.tokenRecuperacao = tokenRecuperacao;
+    }
 
     public byte[] getFotoPerfil() {
         return fotoPerfil;
@@ -119,11 +127,4 @@ public class PerfilModel {
         this.tokenExpiracao = tokenExpiracao;
     }
 
-    public String getResetToken() {
-        return resetToken;
-    }
-
-    public void setResetToken(String resetToken) {
-        this.resetToken = resetToken;
-    }
 }

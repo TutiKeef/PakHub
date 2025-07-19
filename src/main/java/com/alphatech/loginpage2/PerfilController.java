@@ -119,16 +119,5 @@ public class PerfilController {
         session.invalidate();
         return "redirect:/login";
     }
-    //Esqueceu a senha
-    @GetMapping("/esqueceu-senha")
-    public String esqueceuSenhaForm() {
-        return "esqueceu-senha"; // Deve corresponder ao nome do arquivo HTML
-    }
-    @PostMapping("/recuperar-senha")
-    public String recuperarSenha(@RequestParam String email, Model model) {
-        // Lógica para enviar email de recuperação
-        model.addAttribute("message", "Link de recuperação enviado para " + email);
-        return "mensagem";
-    }
 
 }

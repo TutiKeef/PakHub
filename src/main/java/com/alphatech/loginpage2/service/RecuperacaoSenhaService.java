@@ -5,61 +5,69 @@ import com.alphatech.loginpage2.PerfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class RecuperacaoSenhaService {
 
     @Autowired
-    private PerfilRepository perfilRepository;
-
-    @Autowired
     private EmailService emailService;
 
-    public void gerarTokenRecuperacao(String email) throws Exception {
-        Optional<PerfilModel> optionalPerfilModel = perfilRepository.findByEmail(email);
+    @Autowired
+    private PerfilRepository perfilRepository;
 
-        if (optionalPerfilModel.isEmpty()) {
-            throw new Exception("Email não encontrado");
+    // Simulação de um "banco de tokens" em memória. Ideal: usar uma tabela no banco.
+    private ConcurrentHashMap<String, TokenData> tokens = new ConcurrentHashMap<>();
+
+    public void gerarTokenRecuperacao(String email) {
+        Optional<PerfilModel> perfilOpt = perfilRepository.findByEmail(email);
+        if (perfilOpt.isEmpty()) {
+            throw new RuntimeException("E-mail não cadastrado.");
         }
 
-        PerfilModel perfilModel = optionalPerfilModel.get();
         String token = UUID.randomUUID().toString();
-        perfilModel.setResetToken(token);
-        perfilModel.setTokenExpiracao(LocalDateTime.now().plusHours(1));
-        perfilRepository.save(perfilModel);
+        LocalDateTime expiracao = LocalDateTime.now().plusMinutes(30); // expira em 30 minutos
 
-        // Enviando e-mail real
+        tokens.put(token, new TokenData(perfilOpt.get(), expiracao));
+
         String link = "http://localhost:8080/resetar-senha?token=" + token;
-        emailService.enviarEmailComHtml(
-                email,
-                "Recuperação de Senha",
-                "Clique no link para resetar sua senha: " + link
-        );
+        String corpoHtml = "<h2>Recuperação de Senha</h2>" +
+                "<p>Olá! Recebemos uma solicitação para redefinir sua senha.</p>" +
+                "<p><a href=\"" + link + "\" " +
+                "style=\"padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;\">" +
+                "Redefinir Senha</a></p>" +
+                "<p>Se você não solicitou isso, ignore este e-mail.</p>";
+
+        emailService.enviarEmailComHtml(email, "Recupere sua senha", corpoHtml);
     }
 
-    public PerfilModel validarToken(String token) throws Exception {
-        Optional<PerfilModel> optionalPerfilModel = perfilRepository.findByResetToken(token);
-
-        if (optionalPerfilModel.isEmpty()) {
-            throw new Exception("Token inválido");
+    public PerfilModel validarToken(String token) {
+        TokenData tokenData = tokens.get(token);
+        if (tokenData == null || tokenData.expiracao.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token inválido ou expirado.");
         }
-
-        PerfilModel perfilModel = optionalPerfilModel.get();
-        if (perfilModel.getTokenExpiracao() == null || perfilModel.getTokenExpiracao().isBefore(LocalDateTime.now())) {
-            throw new Exception("Token expirado");
-        }
-
-        return perfilModel;
+        return tokenData.perfil;
     }
 
-    public void atualizarSenha(PerfilModel perfilModel, String novaSenha) {
-        perfilModel.setPassword(novaSenha);  // Em produção, use BCrypt
-        perfilModel.setResetToken(null);
-        perfilModel.setTokenExpiracao(null);
-        perfilRepository.save(perfilModel);
+    public void atualizarSenha(PerfilModel perfil, String novaSenha) {
+        perfil.setPassword(novaSenha); // CUIDADO: isso salva a senha em texto puro
+        perfil.setTokenRecuperacao(null);
+        perfil.setTokenExpiracao(null);
+        perfilRepository.save(perfil);
+    }
+
+    // classe interna pra guardar token temporariamente
+    private static class TokenData {
+        PerfilModel perfil;
+        LocalDateTime expiracao;
+
+        public TokenData(PerfilModel perfil, LocalDateTime expiracao) {
+            this.perfil = perfil;
+            this.expiracao = expiracao;
+        }
     }
 }
 
