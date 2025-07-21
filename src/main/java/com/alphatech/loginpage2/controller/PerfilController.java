@@ -1,5 +1,7 @@
-package com.alphatech.loginpage2;
+package com.alphatech.loginpage2.controller;
 
+import com.alphatech.loginpage2.model.PerfilModel;
+import com.alphatech.loginpage2.repository.PerfilRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Controller
 public class PerfilController {
@@ -38,7 +41,8 @@ public class PerfilController {
                         Model model,
                         HttpSession session) {
         PerfilModel perfil = perfilRepository.findByUsername(username);
-        if (perfil != null && perfil.getPassword().equals(password)) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (perfil != null && encoder.matches(password, perfil.getPassword())) {
             session.setAttribute("usuarioLogado", perfil.getUsername());
             return "redirect:/perfil";
         }
@@ -81,7 +85,8 @@ public class PerfilController {
 
         PerfilModel novoPerfil = new PerfilModel();
         novoPerfil.setUsername(username);
-        novoPerfil.setPassword(password);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        novoPerfil.setPassword(encoder.encode(password));
         novoPerfil.setEmail(email);
         novoPerfil.setBio(bio != null ? bio : ""); // Tratamento para null
         novoPerfil.setCellphone(cellphone != null ? cellphone : 0L); // Valor padrão

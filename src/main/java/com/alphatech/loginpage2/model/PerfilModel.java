@@ -1,4 +1,4 @@
-package com.alphatech.loginpage2;
+package com.alphatech.loginpage2.model;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;

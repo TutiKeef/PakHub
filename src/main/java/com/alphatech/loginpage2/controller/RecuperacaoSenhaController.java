@@ -1,7 +1,7 @@
-package com.alphatech.loginpage2;
+package com.alphatech.loginpage2.controller;
 
-import com.alphatech.loginpage2.service.RecuperacaoSenhaService;
-import com.alphatech.loginpage2.PerfilModel;
+import com.alphatech.loginpage2.model.PerfilModel;
+import com.alphatech.loginpage2.service.recuperacaosenha.RecuperacaoSenhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

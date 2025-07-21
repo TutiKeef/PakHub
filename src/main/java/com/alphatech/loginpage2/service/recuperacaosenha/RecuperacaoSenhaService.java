@@ -1,14 +1,15 @@
-package com.alphatech.loginpage2.service;
+package com.alphatech.loginpage2.service.recuperacaosenha;
 
-import com.alphatech.loginpage2.PerfilModel;
-import com.alphatech.loginpage2.PerfilRepository;
+import com.alphatech.loginpage2.model.PerfilModel;
+import com.alphatech.loginpage2.repository.PerfilRepository;
+import com.alphatech.loginpage2.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class RecuperacaoSenhaService {
@@ -19,19 +20,19 @@ public class RecuperacaoSenhaService {
     @Autowired
     private PerfilRepository perfilRepository;
 
-    // Simulação de um "banco de tokens" em memória. Ideal: usar uma tabela no banco.
-    private ConcurrentHashMap<String, TokenData> tokens = new ConcurrentHashMap<>();
-
     public void gerarTokenRecuperacao(String email) {
         Optional<PerfilModel> perfilOpt = perfilRepository.findByEmail(email);
         if (perfilOpt.isEmpty()) {
             throw new RuntimeException("E-mail não cadastrado.");
         }
 
+        PerfilModel perfil = perfilOpt.get();
         String token = UUID.randomUUID().toString();
         LocalDateTime expiracao = LocalDateTime.now().plusMinutes(30); // expira em 30 minutos
 
-        tokens.put(token, new TokenData(perfilOpt.get(), expiracao));
+        perfil.setTokenRecuperacao(token);
+        perfil.setTokenExpiracao(expiracao);
+        perfilRepository.save(perfil);
 
         String link = "http://localhost:8080/resetar-senha?token=" + token;
         String corpoHtml = "<h2>Recuperação de Senha</h2>" +
@@ -45,29 +46,23 @@ public class RecuperacaoSenhaService {
     }
 
     public PerfilModel validarToken(String token) {
-        TokenData tokenData = tokens.get(token);
-        if (tokenData == null || tokenData.expiracao.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Token inválido ou expirado.");
+        Optional<PerfilModel> perfilOpt = perfilRepository.findByTokenRecuperacao(token);
+        if (perfilOpt.isEmpty()) {
+            throw new RuntimeException("Token inválido.");
         }
-        return tokenData.perfil;
+        PerfilModel perfil = perfilOpt.get();
+        if (perfil.getTokenExpiracao() == null || perfil.getTokenExpiracao().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expirado.");
+        }
+        return perfil;
     }
 
     public void atualizarSenha(PerfilModel perfil, String novaSenha) {
-        perfil.setPassword(novaSenha); // CUIDADO: isso salva a senha em texto puro
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        perfil.setPassword(encoder.encode(novaSenha));
         perfil.setTokenRecuperacao(null);
         perfil.setTokenExpiracao(null);
         perfilRepository.save(perfil);
-    }
-
-    // classe interna pra guardar token temporariamente
-    private static class TokenData {
-        PerfilModel perfil;
-        LocalDateTime expiracao;
-
-        public TokenData(PerfilModel perfil, LocalDateTime expiracao) {
-            this.perfil = perfil;
-            this.expiracao = expiracao;
-        }
     }
 }
 
