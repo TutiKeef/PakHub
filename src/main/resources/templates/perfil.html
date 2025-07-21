@@ -48,14 +48,19 @@
     </style>
 </head>
 <body>
-<div class="perfil-container">
-    <h2>Bem-vindo(a), <span th:text="${perfil.username}">usuário</span>!</h2>
-    <div class="info">
-        <p> <span th:text="${perfil.bio}"></span> </p>
-    </div>
-
-    <div class="logout">
-        <a th:href="@{/login}">Sair</a>
+<div class="container mt-5">
+    <h2>Perfil de <span th:text="${perfil.username}"></span></h2>
+    <div class="card" style="width: 18rem;">
+        <div th:if="${perfil.fotoPerfil != null}">
+            <img th:src="'data:image/jpeg;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(perfil.fotoPerfil)}"
+                 class="card-img-top" alt="Foto de Perfil"/>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${perfil.username}"></h5>
+            <p class="card-text"><strong>E-mail:</strong> <span th:text="${perfil.email}"></span></p>
+            <p class="card-text"><strong>Bio:</strong> <span th:text="${perfil.bio}"></span></p>
+            <p class="card-text"><strong>Celular:</strong> <span th:text="${perfil.cellphone}"></span></p>
+        </div>
     </div>
 </div>
 </body>
