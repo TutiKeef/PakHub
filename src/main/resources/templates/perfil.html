@@ -114,7 +114,10 @@
                  class="card-img-top" alt="Foto de Perfil"/>
         </div>
         <div th:if="${perfil.fotoPerfil == null}" class="avatar-iniciais">
-            <span th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()} + (${#strings.contains(perfil.username, ' ')} ? #strings.substring(perfil.username, #strings.indexOf(perfil.username, ' ') + 1, #strings.indexOf(perfil.username, ' ') + 2).toUpperCase() : '')"></span>
+            <span th:if="${#strings.contains(perfil.username, ' ')}"
+                  th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()} + #strings.substring(perfil.username, #strings.indexOf(perfil.username, ' ') + 1, #strings.indexOf(perfil.username, ' ') + 2).toUpperCase()"></span>
+            <span th:unless="${#strings.contains(perfil.username, ' ')}"
+                  th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()}"></span>
         </div>
         <div class="card-body">
             <h5 class="card-title" th:text="${perfil.username}"></h5>

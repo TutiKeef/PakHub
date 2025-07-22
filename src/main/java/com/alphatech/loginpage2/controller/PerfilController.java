@@ -12,14 +12,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.alphatech.loginpage2.model.PostModel;
+import com.alphatech.loginpage2.service.PostService;
+import java.util.List;
 
 @Controller
 public class PerfilController {
 
     private final PerfilRepository perfilRepository;
+    private final PostService postService;
 
-    public PerfilController(PerfilRepository perfilRepository) {
+    public PerfilController(PerfilRepository perfilRepository, PostService postService) {
         this.perfilRepository = perfilRepository;
+        this.postService = postService;
     }
 
     // Redireciona "/" para "/login"
@@ -103,19 +108,6 @@ public class PerfilController {
         perfilRepository.save(novoPerfil);
 
         return "redirect:/login";
-    }
-
-    // Página de perfil
-    @GetMapping("/perfil")
-    public String perfilPage(HttpSession session, Model model) {
-        String username = (String) session.getAttribute("usuarioLogado");
-        if (username == null) {
-            return "redirect:/login";
-        }
-
-        PerfilModel perfil = perfilRepository.findByUsername(username);
-        model.addAttribute("perfil", perfil);
-        return "perfil";
     }
 
     // Logout
