@@ -1,3 +1,5 @@
+package com.alphatech.loginpage2.service;
+
 import com.alphatech.loginpage2.model.PerfilModel;
 import com.alphatech.loginpage2.model.PostModel;
 import com.alphatech.loginpage2.repository.PostRepository;

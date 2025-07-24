@@ -94,7 +94,7 @@ public class PerfilController {
         novoPerfil.setPassword(encoder.encode(password));
         novoPerfil.setEmail(email);
         novoPerfil.setBio(bio != null ? bio : ""); // Tratamento para null
-        novoPerfil.setCellphone(cellphone != null ? cellphone : 0L); // Valor padrão
+        novoPerfil.setCellphone(cellphone); // Salva null se não informado
 
         if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
             try {

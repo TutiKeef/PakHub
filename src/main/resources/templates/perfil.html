@@ -5,130 +5,286 @@
     <title>Meu Perfil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
         body {
-            background: linear-gradient(135deg, #0f2027, #2c5364, #1a2980);
-            color: #e0e0e0;
-            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #222;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+        }
+        .sidebar {
+            width: 180px;
+            background: #1976d2;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            padding-top: 40px;
+            min-height: 100vh;
+            box-shadow: 2px 0 8px #0002;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+        .sidebar h1 {
+            font-size: 1.3em;
+            margin-bottom: 32px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .sidebar button {
+            width: 120px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 12px 0;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar button.active, .sidebar button:hover {
+            background: #fff;
+            color: #1976d2;
+        }
+        .sidebar .logout {
+            margin-top: 40px;
+        }
+        .sidebar .logout a {
+            background: #fff;
+            color: #1976d2;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 0 8px #1976d220;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+        }
+        .sidebar .logout a:hover {
+            background: #1565c0;
+            color: #fff;
+        }
+        .main-content {
+            margin-left: 180px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
         .perfil-container {
-            background: rgba(20, 30, 48, 0.95);
+            background: #fff;
             padding: 40px 36px 32px 36px;
             border-radius: 18px;
-            box-shadow: 0 0 32px 4px #00ffe7a0, 0 2px 8px #000a;
+            box-shadow: 0 0 32px 4px #0001, 0 2px 8px #0002;
             text-align: center;
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
+            margin-top: 40px;
         }
         h2 {
-            color: #00ffe7;
+            color: #1976d2;
             font-size: 2em;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             margin-bottom: 18px;
-            text-shadow: 0 0 8px #00ffe7a0;
         }
         .card {
-            background: rgba(35, 42, 52, 0.85);
+            background: #f5f7fa;
             border-radius: 14px;
-            box-shadow: 0 2px 8px #00ffe740;
+            box-shadow: 0 2px 8px #0001;
             padding: 24px 18px 18px 18px;
             margin: 0 auto 18px auto;
             max-width: 340px;
         }
         .card-img-top {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             object-fit: cover;
             border-radius: 50%;
-            border: 3px solid #00ffe7;
+            border: 3px solid #1976d2;
             margin-bottom: 18px;
-            box-shadow: 0 0 16px #00ffe7a0;
-        }
-        .card-title {
-            color: #00ffe7;
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-        .card-text {
-            color: #e0e0e0;
-            font-size: 1.05em;
-            margin-bottom: 8px;
-        }
-        .logout {
-            margin-top: 24px;
-        }
-        .logout a {
-            background: linear-gradient(90deg, #00ffe7 0%, #1a2980 100%);
-            color: #232a34;
-            font-weight: bold;
-            padding: 10px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            box-shadow: 0 0 12px #00ffe780;
-            transition: background 0.2s, color 0.2s;
-        }
-        .logout a:hover {
-            background: linear-gradient(90deg, #1a2980 0%, #00ffe7 100%);
-            color: #fff;
+            box-shadow: 0 0 8px #1976d220;
         }
         .avatar-iniciais {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: linear-gradient(135deg, #232a34 60%, #00ffe7 100%);
-            color: #00ffe7;
-            font-size: 2.8em;
+            background: linear-gradient(135deg, #e3e3e3 60%, #1976d2 100%);
+            color: #1976d2;
+            font-size: 2.5em;
             font-weight: bold;
             margin: 0 auto 18px auto;
-            box-shadow: 0 0 16px #00ffe7a0;
-            border: 3px solid #00ffe7;
+            box-shadow: 0 0 8px #1976d220;
+            border: 3px solid #1976d2;
             letter-spacing: 2px;
-            text-shadow: 0 0 8px #00ffe7a0;
+        }
+        .card-title {
+            color: #1976d2;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .card-text {
+            color: #333;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+        /* Formulário de post */
+        .post-form {
+            margin: 32px 0 18px 0;
+            text-align: left;
+        }
+        .post-form textarea {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #bdbdbd;
+            padding: 10px;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 60px;
+            margin-bottom: 10px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .post-form button {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 22px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .post-form button:hover {
+            background: #1565c0;
+        }
+        /* Lista de posts */
+        .posts-list {
+            margin-top: 18px;
+            text-align: left;
+        }
+        .post-item {
+            background: #f1f8ff;
+            border-radius: 8px;
+            padding: 14px 14px 8px 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 4px #1976d210;
+        }
+        .post-item .post-date {
+            color: #888;
+            font-size: 0.92em;
+            margin-top: 6px;
+            display: block;
+        }
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 60px;
+                padding-top: 18px;
+            }
+            .sidebar h1 {
+                display: none;
+            }
+            .sidebar button {
+                width: 40px;
+                font-size: 1.3em;
+                padding: 10px 0;
+            }
+            .sidebar .logout {
+                margin-top: 20px;
+            }
+            .main-content {
+                margin-left: 60px;
+            }
         }
         @media (max-width: 600px) {
             .perfil-container {
-                padding: 18px 6vw 18px 6vw;
+                padding: 18px 4vw 18px 4vw;
                 max-width: 98vw;
             }
             .card {
-                padding: 12px 4vw 12px 4vw;
+                padding: 12px 2vw 12px 2vw;
             }
         }
     </style>
 </head>
 <body>
-<div class="perfil-container">
-    <h2>Perfil de <span th:text="${perfil.username}"></span></h2>
-    <div class="card">
-        <div th:if="${perfil.fotoPerfil != null}">
-            <img th:src="'data:image/jpeg;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(perfil.fotoPerfil)}"
-                 class="card-img-top" alt="Foto de Perfil"/>
-        </div>
-        <div th:if="${perfil.fotoPerfil == null}" class="avatar-iniciais">
-            <span th:if="${#strings.contains(perfil.username, ' ')}"
-                  th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()} + #strings.substring(perfil.username, #strings.indexOf(perfil.username, ' ') + 1, #strings.indexOf(perfil.username, ' ') + 2).toUpperCase()"></span>
-            <span th:unless="${#strings.contains(perfil.username, ' ')}"
-                  th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()}"></span>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title" th:text="${perfil.username}"></h5>
-            <p class="card-text"><strong>E-mail:</strong> <span th:text="${perfil.email}"></span></p>
-            <p class="card-text"><strong>Bio:</strong> <span th:text="${perfil.bio}"></span></p>
-            <p class="card-text"><strong>Celular:</strong> <span th:text="${perfil.cellphone}"></span></p>
-        </div>
-    </div>
+<div class="sidebar">
+    <h1>PakHub</h1>
+    <button id="btnPerfil" class="active" onclick="showSection('perfil')">Perfil</button>
+    <button id="btnPosts" onclick="showSection('posts')">Posts</button>
     <div class="logout">
         <a href="/logout">Sair</a>
     </div>
 </div>
+<div class="main-content">
+    <div class="perfil-container" id="section-perfil">
+        <h2>Perfil de <span th:text="${perfil.username}"></span></h2>
+        <div class="card">
+            <div th:if="${perfil.fotoPerfil != null}">
+                <img th:src="'data:image/jpeg;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(perfil.fotoPerfil)}"
+                     class="card-img-top" alt="Foto de Perfil"/>
+            </div>
+            <div th:if="${perfil.fotoPerfil == null}" class="avatar-iniciais">
+                <span th:if="${#strings.contains(perfil.username, ' ')}"
+                      th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()} + #strings.substring(perfil.username, #strings.indexOf(perfil.username, ' ') + 1, #strings.indexOf(perfil.username, ' ') + 2).toUpperCase()"></span>
+                <span th:unless="${#strings.contains(perfil.username, ' ')}"
+                      th:text="${#strings.substring(perfil.username, 0, 1).toUpperCase()}"></span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${perfil.username}"></h5>
+                <p class="card-text"><strong>E-mail:</strong> <span th:text="${perfil.email}"></span></p>
+                <p class="card-text"><strong>Bio:</strong> <span th:text="${perfil.bio}"></span></p>
+                <p class="card-text" th:if="${perfil.cellphone != null and perfil.cellphone != 0}"><strong>Celular:</strong> <span th:text="${perfil.cellphone}"></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="perfil-container" id="section-posts" style="display:none;">
+        <form class="post-form" th:action="@{/perfil/postar}" method="post">
+            <label for="postText"><strong>Fazer um novo post:</strong></label>
+            <textarea id="postText" name="text" placeholder="Escreva seu post aqui..." required></textarea>
+            <button type="submit">Postar</button>
+        </form>
+        <div class="posts-list">
+            <h3 style="color:#1976d2; margin-bottom:10px;">Meus Posts</h3>
+            <div th:if="${#lists.isEmpty(posts)}">
+                <p style="color:#888;">Você ainda não fez nenhum post.</p>
+            </div>
+            <div th:each="post : ${posts}">
+                <div class="post-item">
+                    <span th:text="${post.text}"></span>
+                    <span class="post-date" th:text="${#temporals.format(post.dateCriacao, 'dd/MM/yyyy HH:mm')}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showSection(section) {
+        const perfil = document.getElementById('section-perfil');
+        const posts = document.getElementById('section-posts');
+        const btnPerfil = document.getElementById('btnPerfil');
+        const btnPosts = document.getElementById('btnPosts');
+        if (section === 'perfil') {
+            perfil.style.display = '';
+            posts.style.display = 'none';
+            btnPerfil.classList.add('active');
+            btnPosts.classList.remove('active');
+        } else {
+            perfil.style.display = 'none';
+            posts.style.display = '';
+            btnPerfil.classList.remove('active');
+            btnPosts.classList.add('active');
+        }
+    }
+</script>
 </body>
 </html>
